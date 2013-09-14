@@ -1,0 +1,55 @@
+/** 
+ * Generating string permutations/
+ * Currently 'splodes if string is pretty large
+ */
+
+function listPermutations(str) {
+	var permutations = permute(str);
+	permutations.forEach(function(word) {
+		console.log(word + "\n");
+	});
+	console.log("\n\nDONE");
+}
+
+function permute(toPermute) {
+	var permutations = [];
+	if (!toPermute) {
+		return permutations;
+	}
+	if (toPermute.length == 1) {
+		permutations.push(toPermute);
+		return permutations;
+	}
+
+	var char = toPermute.charAt(0);
+	var remainders = permute(toPermute.substring(1));
+	while (remainders.length) {
+		// concatinate into the same array, since this could get large
+		Array.prototype.push.apply(permutations, generateInsertions(char, remainders.pop()));
+	}
+	return permutations;
+}
+
+function generateInsertions(toInsert, targetString) {
+	var insertions = [];
+	// <= cause I want to append the character on the end too
+	for (var i = 0; i <= targetString.length; ++i) {
+		insertions.push(insertChar(toInsert, targetString, i));
+	}
+	return insertions;
+}
+
+function insertChar(toInsert, targetString, index) {
+	if (!toInsert || !targetString) {
+		return toInsert || targetString || "";
+	}
+	return targetString.substring(0, index) + toInsert + targetString.substring(index)
+ }
+
+
+listPermutations("Dog");
+listPermutations("bear");
+listPermutations("froyo");
+listPermutations("munchies");
+// listPermutations("abracadabra");
+// listPermutations("Alabaster String Cheese");
