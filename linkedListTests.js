@@ -73,6 +73,26 @@ function LinkedList() {
 		console.log(toString());
 	}
 
+	function reverse(node) {
+		if (!node || !node.hasNext()) {
+			return node;
+		}
+
+		// grab the next item down in the list
+		// this will be the new tail of the reversed list
+		var nextItem = node.getNext();
+		// clear out our current node's next link
+		node.setNext(null);
+
+		// reverse the remainder
+		var reversed = reverse(nextItem);
+
+		// set our nextItem's next link to our current node
+		nextItem.setNext(node);
+
+		return reversed;
+	}
+
 	function reverseListStack() {
 		if (!head) { return; }
 
@@ -98,26 +118,6 @@ function LinkedList() {
 		node.setNext(null); // new tail node
 
 		console.log(toString());
-	}
-
-	function reverse(node) {
-		if (!node || !node.hasNext()) {
-			return node;
-		}
-
-		// grab the next item down in the list
-		// this will be the new tail of the reversed list
-		var nextItem = node.getNext();
-		// clear out our current node's next link
-		node.setNext(null);
-
-		// reverse the remainder
-		var reversed = reverse(nextItem);
-
-		// set our nextItem's next link to our current node
-		nextItem.setNext(node);
-
-		return reversed;
 	}
 
 	return {
