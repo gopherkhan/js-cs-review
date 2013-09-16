@@ -18,18 +18,22 @@ var Clock = function Clock () {
 		}
 	}
 
+	// NOTE: Canvas Y value grows downward, while X works as expected (grows to the right).
+	// this means that angles increase in a clockwise motion, rather than counter-clockwise.
+	// We perform our angle caclulations, and simply rotate by -90 degrees so that 0 degrees
+	// happens at the '3' tick on the clock
 	function getAngleForHours(time) {
 		var hardHourAngle = (time.getHours() % 12) * 30; // 360 / 12;
 		var minuteSlip = time.getMinutes() * 0.5; // ((360 / 12) / 60) 
 		// have to subtrack 90 degrees because of clock orientation 
-		return (hardHourAngle + minuteSlip - 90) *  Math.PI / 180; //minuteSlip) 
+		return degreesToRadians(hardHourAngle + minuteSlip - 90); 
 	}
 
 	function getAngleForMinutes(time) {
 		var hardMinuteAngle = time.getMinutes() * 6;  // (360 / 60) 
 		var secondsSlip = time.getSeconds() * 0.1; // ((360 / 60) / 60)
 		// have to subtrack 90 degrees because of clock orientation 
-		return (hardMinuteAngle + secondsSlip - 90) * Math.PI / 180;
+		return degreesToRadians(hardMinuteAngle + secondsSlip - 90);
 	}
 
 	function startTicking() {
@@ -107,11 +111,15 @@ var Clock = function Clock () {
 
 		var radians = 0;
 		for (var i = 0; i < 12; ++i) {
-			radians = i * hour_diff_angle * Math.PI / 180;
+			radians = degreesToRadians(i * hour_diff_angle);
 			context.moveTo(tickMarkStart * Math.cos(radians) + centerX, tickMarkStart * Math.sin(radians) + centerY);
 	   		context.lineTo(minuteHandLength * Math.cos(radians) + centerX, minuteHandLength * Math.sin(radians) + centerY);
 	   		context.stroke();
 		}
+	}
+
+	function degreesToRadians(degrees) {
+		return degrees * Math.PI / 180;
 	}
 
 	return {
