@@ -125,6 +125,6 @@ var Clock = function Clock () {
 	return {
 		startTicking: startTicking
 	}
-}().startTicking();
+}();
 
 
